@@ -1,0 +1,61 @@
+{{- with .Data -}}
+# [{{ .Name }}]({{ .PublicUrl }})
+
+By: [{{ .Creator.Name }}]({{ .Creator.PublicUrl }}) {{ .Added }}
+
+## Summary: 
+
+{{ .Description }}
+
+## Print Settings
+
+{{ with printSettings . }}
+
+### Printer Brand
+
+{{ .PrinterBrand }}
+
+### Printer
+
+{{ .Printer }}
+
+### Resolution
+
+{{ .Resolution }}
+
+### Infill
+
+{{ .Infill }}
+
+### Filament
+
+{{ .FilamentBrand }}
+{{ .FilamentColor }}
+{{ .FilamentMaterial }}
+
+### Notes
+
+{{ .Notes }}
+
+{{ end }}
+
+## Custom Section
+
+{{ range (customSections .) }}
+{{ .Video }}
+{{ end }}
+
+## Tags
+
+## Design Tools
+
+## License
+
+{{ .License }}
+
+## Thing Statistics
+
+{{ .ViewCount }} Views
+{{ .DownloadCount }} Downloads
+
+{{ end -}}

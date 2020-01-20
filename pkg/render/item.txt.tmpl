@@ -1,0 +1,7 @@
+{{- with .Data -}}
+Name: {{ .Name }}
+URL: {{ .PublicUrl }}
+By: {{ .Creator.Name }} 
+Created: {{ .Added }}
+Summary: {{ .Description }}
+{{ end -}}

@@ -1,0 +1,15 @@
+
+{{- if $.Options.LongFormat -}}
+
+{{- printf "%-7s|%-41s|%-40s" "ID" "URL" "Name" }}
+{{ range .Data -}}
+{{- printf "%-7d" .Id -}}|{{- .PublicUrl -}}|{{- printf "%-40s" .Name }}
+{{ end -}}
+
+{{- else -}}
+
+{{- range .Data -}}
+{{- .Id }}
+{{ end -}}
+
+{{ end -}}
