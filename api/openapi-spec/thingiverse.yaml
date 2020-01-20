@@ -169,8 +169,8 @@ components:
           type: string
         thumbnail:
           type: string
-        default_image:
-          type: string
+        # default_image:
+        #   type: string
         date:
           type: string
         formatted_size:

@@ -43,7 +43,6 @@ type Error struct {
 // File defines model for File.
 type File struct {
 	Date          *string   `json:"date,omitempty"`
-	DefaultImage  *string   `json:"default_image,omitempty"`
 	DownloadCount *int64    `json:"download_count,omitempty"`
 	FormattedSize *string   `json:"formatted_size,omitempty"`
 	Id            int64     `json:"id"`

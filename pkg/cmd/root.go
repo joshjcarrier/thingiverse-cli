@@ -46,10 +46,11 @@ func Execute(version string) {
 func init() {
 	cobra.OnInitialize(initConfig)
 
+	rootCmd.AddCommand(filesCmd)
 	rootCmd.AddCommand(getCmd)
+	rootCmd.AddCommand(loginCmd)
 	rootCmd.AddCommand(searchCmd)
 	rootCmd.AddCommand(userCmd)
-	rootCmd.AddCommand(loginCmd)
 }
 
 func initConfig() {

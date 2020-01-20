@@ -87,7 +87,9 @@ type format struct {
 
 func (t format) template(v interface{}) string {
 	switch v.(type) {
-	case api.Thing:
+	case api.Files:
+		return t.list
+	case *api.Thing:
 		return t.item
 	case api.Things:
 		return t.list
