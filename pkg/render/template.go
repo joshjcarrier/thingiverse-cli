@@ -55,7 +55,7 @@ type Options struct {
 }
 
 // Execute renders data to the writer using a specified format.
-func Execute(w io.Writer, data interface{}, opts Options) error {
+func Execute(w io.Writer, data interface{}, opts *Options) error {
 	f := *fmtMap[opts.Format]
 
 	funcs := make(map[string]interface{}, len(funcMap))

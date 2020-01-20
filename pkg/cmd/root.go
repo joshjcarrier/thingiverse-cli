@@ -6,6 +6,7 @@ import (
 
 	api "github.com/joshjcarrier/thingiverse-cli/pkg/api/thingiverse"
 	"github.com/joshjcarrier/thingiverse-cli/pkg/render"
+	"github.com/joshjcarrier/thingiverse-cli/pkg/writer"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -15,6 +16,9 @@ var (
 		API: &api.Options{},
 		Render: &render.Options{
 			Format: "txt",
+		},
+		Writer: &writer.Options{
+			OutputDirectory: writer.StdoutOutputDirectory,
 		},
 	}
 	rootCmd = &cobra.Command{
@@ -27,6 +31,7 @@ var (
 type Options struct {
 	API    *api.Options
 	Render *render.Options
+	Writer *writer.Options
 }
 
 // Execute executes the root command.

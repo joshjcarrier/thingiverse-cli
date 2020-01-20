@@ -2,11 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/joshjcarrier/thingiverse-cli/pkg/render"
+	"github.com/joshjcarrier/thingiverse-cli/pkg/writer"
 
-	Thingiverse "github.com/joshjcarrier/thingiverse-cli/pkg/api/thingiverse"
 	api "github.com/joshjcarrier/thingiverse-cli/pkg/api/thingiverse"
 	"github.com/spf13/cobra"
 )
@@ -17,8 +16,9 @@ var (
 		Short: "Gets Things for a given user",
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			response, _ := Thingiverse.ListThingsByUsername(args[0], options.API)
-			err := render.Execute(os.Stdout, response, *options.Render)
+			t, _ := api.ListThingsByUsername(args[0], options.API)
+			w, _ := writer.NewWriter(t, options.Render.Format, options.Writer)
+			err := render.Execute(w, t, options.Render)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -29,4 +29,5 @@ var (
 func init() {
 	api.InstallAPICommandFlags(userCmd, options.API)
 	render.InstallCommandFlags(userCmd, options.Render)
+	writer.InstallWriterCommandFlags(userCmd, options.Writer)
 }
