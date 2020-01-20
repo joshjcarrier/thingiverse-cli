@@ -14,6 +14,25 @@ components:
 security:
   - bearerAuth: [] 
 paths:
+  /files/{id}/download:
+    get:
+      summary: Get file by id
+      operationId: getFileContentById
+      parameters:
+        - name: id
+          in: path
+          description: The id of the file to get
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: File content
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
   /search/{term}:
     get:
       summary: Search things matching a term

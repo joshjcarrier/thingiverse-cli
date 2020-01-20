@@ -17,11 +17,14 @@ const (
 
 // Options for writing rendering.
 type Options struct {
+	KeepFiles       bool
 	OutputDirectory string
 }
 
 // InstallWriterCommandFlags installs writer-specific command flags.
 func InstallWriterCommandFlags(c *cobra.Command, opts *Options) {
+	c.Flags().BoolVarP(&opts.KeepFiles, "keep-files", "k", false, "download file contents to output directory")
+
 	c.Flags().StringVarP(&opts.OutputDirectory, "output-dir", "o", opts.OutputDirectory, fmt.Sprintf("Output directory, or \"%s\" for STDOUT.", StdoutOutputDirectory))
 }
 

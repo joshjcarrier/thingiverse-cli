@@ -36,6 +36,22 @@ func GetThingByID(id string, opts *Options) (*Thing, error) {
 	return response.JSON200, nil
 }
 
+// GetFileContentByID gets a thing by its database id
+func GetFileContentByID(id string, opts *Options) ([]byte, error) {
+	client, err := newClient(opts)
+	if err != nil {
+		return nil, err
+	}
+	response, err := client.GetFileContentByIdWithResponse(context.Background(), id)
+	if err != nil {
+		return nil, err
+	}
+	if (*response).StatusCode() >= 300 {
+		return nil, nil
+	}
+	return response.Body, nil
+}
+
 // GetThingFilesByThingID gets a thing by its database id
 func GetThingFilesByThingID(id string, opts *Options) (Files, error) {
 	client, err := newClient(opts)

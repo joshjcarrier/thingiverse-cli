@@ -170,6 +170,9 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
+	// GetFileContentById request
+	GetFileContentById(ctx context.Context, id string) (*http.Response, error)
+
 	// SearchThingsByTerm request
 	SearchThingsByTerm(ctx context.Context, term string) (*http.Response, error)
 
@@ -181,6 +184,21 @@ type ClientInterface interface {
 
 	// ListThingsByUsername request
 	ListThingsByUsername(ctx context.Context, username string) (*http.Response, error)
+}
+
+func (c *Client) GetFileContentById(ctx context.Context, id string) (*http.Response, error) {
+	req, err := NewGetFileContentByIdRequest(c.Server, id)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if c.RequestEditor != nil {
+		err = c.RequestEditor(req, ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return c.Client.Do(req)
 }
 
 func (c *Client) SearchThingsByTerm(ctx context.Context, term string) (*http.Response, error) {
@@ -241,6 +259,34 @@ func (c *Client) ListThingsByUsername(ctx context.Context, username string) (*ht
 		}
 	}
 	return c.Client.Do(req)
+}
+
+// NewGetFileContentByIdRequest generates requests for GetFileContentById
+func NewGetFileContentByIdRequest(server string, id string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParam("simple", false, "id", id)
+	if err != nil {
+		return nil, err
+	}
+
+	queryUrl, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+	queryUrl, err = queryUrl.Parse(fmt.Sprintf("/files/%s/download", pathParam0))
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryUrl.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
 }
 
 // NewSearchThingsByTermRequest generates requests for SearchThingsByTerm
@@ -385,6 +431,27 @@ func WithBaseURL(baseURL string) ClientOption {
 	}
 }
 
+type getFileContentByIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+}
+
+// Status returns HTTPResponse.Status
+func (r getFileContentByIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r getFileContentByIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type searchThingsByTermResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -477,6 +544,15 @@ func (r listThingsByUsernameResponse) StatusCode() int {
 	return 0
 }
 
+// GetFileContentByIdWithResponse request returning *GetFileContentByIdResponse
+func (c *ClientWithResponses) GetFileContentByIdWithResponse(ctx context.Context, id string) (*getFileContentByIdResponse, error) {
+	rsp, err := c.GetFileContentById(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetFileContentByIdResponse(rsp)
+}
+
 // SearchThingsByTermWithResponse request returning *SearchThingsByTermResponse
 func (c *ClientWithResponses) SearchThingsByTermWithResponse(ctx context.Context, term string) (*searchThingsByTermResponse, error) {
 	rsp, err := c.SearchThingsByTerm(ctx, term)
@@ -511,6 +587,25 @@ func (c *ClientWithResponses) ListThingsByUsernameWithResponse(ctx context.Conte
 		return nil, err
 	}
 	return ParseListThingsByUsernameResponse(rsp)
+}
+
+// ParseGetFileContentByIdResponse parses an HTTP response from a GetFileContentByIdWithResponse call
+func ParseGetFileContentByIdResponse(rsp *http.Response) (*getFileContentByIdResponse, error) {
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &getFileContentByIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	}
+
+	return response, nil
 }
 
 // ParseSearchThingsByTermResponse parses an HTTP response from a SearchThingsByTermWithResponse call
